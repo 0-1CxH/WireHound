@@ -1,0 +1,201 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis.css" type="text/css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.16.1/vis-network.min.js"> </script>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+<style type="text/css">
+
+        #mynetwork {
+            width: 100%;
+            height: 100%;
+            background-color: #222222;
+            border: 1px solid lightgray;
+            position: relative;
+            float: left;
+        }
+
+        
+        #loadingBar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width: 100%;
+            height: 100%;
+            background-color:rgba(200,200,200,0.8);
+            -webkit-transition: all 0.5s ease;
+            -moz-transition: all 0.5s ease;
+            -ms-transition: all 0.5s ease;
+            -o-transition: all 0.5s ease;
+            transition: all 0.5s ease;
+            opacity:1;
+        }
+
+        #bar {
+            position:absolute;
+            top:0px;
+            left:0px;
+            width:20px;
+            height:20px;
+            margin:auto auto auto auto;
+            border-radius:11px;
+            border:2px solid rgba(30,30,30,0.05);
+            background: rgb(0, 173, 246); /* Old browsers */
+            box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+        }
+
+        #border {
+            position:absolute;
+            top:10px;
+            left:10px;
+            width:500px;
+            height:23px;
+            margin:auto auto auto auto;
+            box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+            border-radius:10px;
+        }
+
+        #text {
+            position:absolute;
+            top:8px;
+            left:530px;
+            width:30px;
+            height:50px;
+            margin:auto auto auto auto;
+            font-size:22px;
+            color: #000000;
+        }
+
+        div.outerBorder {
+            position:relative;
+            top:400px;
+            width:600px;
+            height:44px;
+            margin:auto auto auto auto;
+            border:8px solid rgba(0,0,0,0.1);
+            background: rgb(252,252,252); /* Old browsers */
+            background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+            border-radius:72px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+        }
+        
+
+        
+
+        
+</style>
+
+</head>
+
+<body>
+<div id = "mynetwork"></div>
+
+<div id="loadingBar">
+    <div class="outerBorder">
+        <div id="text">0%</div>
+        <div id="border">
+            <div id="bar"></div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+        var container = document.getElementById('mynetwork');
+        
+        
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"font": {"color": "white"}, "id": "203.202.129.172", "label": "203.202.129.172", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "126.184.187.160", "label": "126.184.187.160", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.137.240", "label": "203.202.137.240", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "52.99.51.111", "label": "52.99.51.111", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.142.158", "label": "203.202.142.158", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "192.150.132.79", "label": "192.150.132.79", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.140.242", "label": "203.202.140.242", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "104.114.22.97", "label": "104.114.22.97", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "115.76.7.169", "label": "115.76.7.169", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.143.79", "label": "203.202.143.79", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "61.224.185.92", "label": "61.224.185.92", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.131.215", "label": "203.202.131.215", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "222.69.94.224", "label": "222.69.94.224", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "192.150.132.77", "label": "192.150.132.77", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "192.150.132.76", "label": "192.150.132.76", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.134.227", "label": "203.202.134.227", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "45.15.221.67", "label": "45.15.221.67", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.141.90", "label": "203.202.141.90", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "64.106.169.136", "label": "64.106.169.136", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.136.94", "label": "203.202.136.94", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "121.129.28.104", "label": "121.129.28.104", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "211.166.154.52", "label": "211.166.154.52", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "218.151.222.170", "label": "218.151.222.170", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "106.88.159.166", "label": "106.88.159.166", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.107.187.20", "label": "203.107.187.20", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.157.124", "label": "203.202.157.124", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.143.255", "label": "203.202.143.255", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.195.12.220", "label": "203.195.12.220", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.154.17", "label": "203.202.154.17", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.100.169.241", "label": "203.100.169.241", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.100.169.243", "label": "203.100.169.243", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.131.189", "label": "203.202.131.189", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.141.135", "label": "203.202.141.135", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "121.206.166.75", "label": "121.206.166.75", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.138.114", "label": "203.202.138.114", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "77.240.181.150", "label": "77.240.181.150", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.136.220", "label": "203.202.136.220", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "198.253.93.147", "label": "198.253.93.147", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.143.15", "label": "203.202.143.15", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "45.175.223.85", "label": "45.175.223.85", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.170.21.219", "label": "203.170.21.219", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "163.66.225.237", "label": "163.66.225.237", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.130.153", "label": "203.202.130.153", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "92.94.75.175", "label": "92.94.75.175", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.129.166", "label": "203.202.129.166", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "23.64.9.137", "label": "23.64.9.137", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.143.235", "label": "203.202.143.235", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "193.148.61.186", "label": "193.148.61.186", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "49.137.63.88", "label": "49.137.63.88", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.131.251", "label": "203.202.131.251", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "91.122.98.47", "label": "91.122.98.47", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "89.242.163.7", "label": "89.242.163.7", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.142.139", "label": "203.202.142.139", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "52.217.0.242", "label": "52.217.0.242", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.129.181", "label": "203.202.129.181", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "46.38.150.5", "label": "46.38.150.5", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.137.249", "label": "203.202.137.249", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "188.108.27.218", "label": "188.108.27.218", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "147.171.66.114", "label": "147.171.66.114", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.141.186", "label": "203.202.141.186", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "217.171.121.50", "label": "217.171.121.50", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.131.243", "label": "203.202.131.243", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "95.225.214.78", "label": "95.225.214.78", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.137.232", "label": "203.202.137.232", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.18.133.210", "label": "203.18.133.210", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.148.16", "label": "203.202.148.16", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.133.108", "label": "203.202.133.108", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "187.47.23.237", "label": "187.47.23.237", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "46.38.150.138", "label": "46.38.150.138", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.129.140", "label": "203.202.129.140", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "14.232.158.134", "label": "14.232.158.134", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "126.167.142.195", "label": "126.167.142.195", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.135.252", "label": "203.202.135.252", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "31.61.13.217", "label": "31.61.13.217", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.133.80", "label": "203.202.133.80", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "46.103.29.172", "label": "46.103.29.172", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "121.124.2.89", "label": "121.124.2.89", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.131.12", "label": "203.202.131.12", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.172.15.24", "label": "203.172.15.24", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "202.121.181.213", "label": "202.121.181.213", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "178.186.181.31", "label": "178.186.181.31", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.135.228", "label": "203.202.135.228", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "140.178.73.37", "label": "140.178.73.37", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "211.115.223.116", "label": "211.115.223.116", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "173.35.47.46", "label": "173.35.47.46", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "54.106.119.237", "label": "54.106.119.237", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "92.142.82.7", "label": "92.142.82.7", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.132.35", "label": "203.202.132.35", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "148.72.234.104", "label": "148.72.234.104", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "121.124.0.59", "label": "121.124.0.59", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.178.210.173", "label": "203.178.210.173", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "202.115.214.230", "label": "202.115.214.230", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.129.182", "label": "203.202.129.182", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "52.222.144.218", "label": "52.222.144.218", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.136.211", "label": "203.202.136.211", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.186.249.91", "label": "203.186.249.91", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.236.182", "label": "203.202.236.182", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "45.130.5.114", "label": "45.130.5.114", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.247.72.64", "label": "203.247.72.64", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "133.234.179.81", "label": "133.234.179.81", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.143.253", "label": "203.202.143.253", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "142.66.161.239", "label": "142.66.161.239", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "46.38.150.172", "label": "46.38.150.172", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "60.136.78.90", "label": "60.136.78.90", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.112.105.253", "label": "203.112.105.253", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "149.19.136.164", "label": "149.19.136.164", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.131.182", "label": "203.202.131.182", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.131.236", "label": "203.202.131.236", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "31.178.237.103", "label": "31.178.237.103", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.136.18", "label": "203.202.136.18", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "175.230.195.109", "label": "175.230.195.109", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.137.193", "label": "203.202.137.193", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "114.96.252.141", "label": "114.96.252.141", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "69.118.84.194", "label": "69.118.84.194", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "34.226.207.201", "label": "34.226.207.201", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.134.78", "label": "203.202.134.78", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "106.13.146.102", "label": "106.13.146.102", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.138.108", "label": "203.202.138.108", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.112.105.254", "label": "203.112.105.254", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.132.44", "label": "203.202.132.44", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "51.255.214.164", "label": "51.255.214.164", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "92.142.82.24", "label": "92.142.82.24", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.137.201", "label": "203.202.137.201", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "1.173.32.207", "label": "1.173.32.207", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "192.150.132.78", "label": "192.150.132.78", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "45.173.120.80", "label": "45.173.120.80", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.133.69", "label": "203.202.133.69", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "13.152.213.226", "label": "13.152.213.226", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.217.110", "label": "203.202.217.110", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "192.150.132.95", "label": "192.150.132.95", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "99.116.225.59", "label": "99.116.225.59", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.231.47", "label": "203.202.231.47", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "183.34.234.24", "label": "183.34.234.24", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.138.107", "label": "203.202.138.107", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "123.56.42.186", "label": "123.56.42.186", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "106.53.158.107", "label": "106.53.158.107", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.149.101", "label": "203.202.149.101", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "54.176.138.21", "label": "54.176.138.21", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "107.40.63.31", "label": "107.40.63.31", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.134.90", "label": "203.202.134.90", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "98.246.81.19", "label": "98.246.81.19", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.146.71", "label": "203.202.146.71", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "184.150.8.212", "label": "184.150.8.212", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "118.101.253.6", "label": "118.101.253.6", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.240.240.25", "label": "203.240.240.25", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "202.121.148.179", "label": "202.121.148.179", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.236.69.95", "label": "203.236.69.95", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "202.121.184.241", "label": "202.121.184.241", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "173.33.50.185", "label": "173.33.50.185", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.128.210", "label": "203.202.128.210", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "216.69.29.168", "label": "216.69.29.168", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.170.247.16", "label": "203.170.247.16", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "133.37.56.19", "label": "133.37.56.19", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "203.202.131.208", "label": "203.202.131.208", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "52.75.197.125", "label": "52.75.197.125", "shape": "dot", "size": 1}, {"font": {"color": "white"}, "id": "200.51.247.215", "label": "200.51.247.215", "shape": "dot", "size": 1}]);
+        edges = new vis.DataSet([{"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "126.184.187.160", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.137.240", "physics": true, "title": null, "to": "52.99.51.111", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.142.158", "physics": true, "title": null, "to": "192.150.132.79", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.140.242", "physics": true, "title": null, "to": "104.114.22.97", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "115.76.7.169", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.143.79", "physics": true, "title": null, "to": "61.224.185.92", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.131.215", "physics": true, "title": null, "to": "222.69.94.224", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.142.158", "physics": true, "title": null, "to": "192.150.132.77", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.142.158", "physics": true, "title": null, "to": "192.150.132.76", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.134.227", "physics": true, "title": null, "to": "45.15.221.67", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.141.90", "physics": true, "title": null, "to": "64.106.169.136", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.94", "physics": true, "title": null, "to": "121.129.28.104", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.94", "physics": true, "title": null, "to": "211.166.154.52", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "218.151.222.170", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.94", "physics": true, "title": null, "to": "106.88.159.166", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.107.187.20", "physics": true, "title": null, "to": "203.202.157.124", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.143.255", "physics": true, "title": null, "to": "222.69.94.224", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.195.12.220", "physics": true, "title": null, "to": "203.202.154.17", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.100.169.241", "physics": true, "title": null, "to": "203.100.169.243", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.131.189", "physics": true, "title": null, "to": "222.69.94.224", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.141.135", "physics": true, "title": null, "to": "121.206.166.75", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.138.114", "physics": true, "title": null, "to": "77.240.181.150", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.220", "physics": true, "title": null, "to": "198.253.93.147", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.195.12.220", "physics": true, "title": null, "to": "203.202.143.15", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.143.255", "physics": true, "title": null, "to": "45.175.223.85", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.170.21.219", "physics": true, "title": null, "to": "163.66.225.237", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.130.153", "physics": true, "title": null, "to": "92.94.75.175", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.166", "physics": true, "title": null, "to": "23.64.9.137", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.143.235", "physics": true, "title": null, "to": "193.148.61.186", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "49.137.63.88", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.131.251", "physics": true, "title": null, "to": "91.122.98.47", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.94", "physics": true, "title": null, "to": "89.242.163.7", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.142.139", "physics": true, "title": null, "to": "52.217.0.242", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.181", "physics": true, "title": null, "to": "46.38.150.5", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.137.249", "physics": true, "title": null, "to": "188.108.27.218", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "147.171.66.114", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.141.186", "physics": true, "title": null, "to": "217.171.121.50", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.131.243", "physics": true, "title": null, "to": "95.225.214.78", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.195.12.220", "physics": true, "title": null, "to": "203.202.137.232", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.18.133.210", "physics": true, "title": null, "to": "203.202.148.16", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.133.108", "physics": true, "title": null, "to": "187.47.23.237", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.141.90", "physics": true, "title": null, "to": "46.38.150.138", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.140", "physics": true, "title": null, "to": "14.232.158.134", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.166", "physics": true, "title": null, "to": "126.167.142.195", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.135.252", "physics": true, "title": null, "to": "31.61.13.217", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.133.80", "physics": true, "title": null, "to": "222.69.94.224", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.140", "physics": true, "title": null, "to": "46.103.29.172", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.94", "physics": true, "title": null, "to": "121.124.2.89", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.131.12", "physics": true, "title": null, "to": "46.38.150.138", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.172.15.24", "physics": true, "title": null, "to": "202.121.181.213", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "178.186.181.31", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.135.228", "physics": true, "title": null, "to": "140.178.73.37", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "211.115.223.116", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.141.90", "physics": true, "title": null, "to": "173.35.47.46", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.141.186", "physics": true, "title": null, "to": "54.106.119.237", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.141.90", "physics": true, "title": null, "to": "92.142.82.7", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.132.35", "physics": true, "title": null, "to": "148.72.234.104", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.94", "physics": true, "title": null, "to": "121.124.0.59", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.178.210.173", "physics": true, "title": null, "to": "202.115.214.230", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.182", "physics": true, "title": null, "to": "52.222.144.218", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.211", "physics": true, "title": null, "to": "222.69.94.224", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.186.249.91", "physics": true, "title": null, "to": "203.202.236.182", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.181", "physics": true, "title": null, "to": "45.130.5.114", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.247.72.64", "physics": true, "title": null, "to": "133.234.179.81", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.143.253", "physics": true, "title": null, "to": "142.66.161.239", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.141.90", "physics": true, "title": null, "to": "46.38.150.172", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "60.136.78.90", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.112.105.253", "physics": true, "title": null, "to": "149.19.136.164", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.131.182", "physics": true, "title": null, "to": "222.69.94.224", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.131.236", "physics": true, "title": null, "to": "31.178.237.103", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.18", "physics": true, "title": null, "to": "175.230.195.109", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.137.193", "physics": true, "title": null, "to": "114.96.252.141", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.137.249", "physics": true, "title": null, "to": "69.118.84.194", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.135.252", "physics": true, "title": null, "to": "34.226.207.201", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.134.78", "physics": true, "title": null, "to": "222.69.94.224", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.130.153", "physics": true, "title": null, "to": "106.13.146.102", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.138.108", "physics": true, "title": null, "to": "222.69.94.224", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.112.105.254", "physics": true, "title": null, "to": "149.19.136.164", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.132.44", "physics": true, "title": null, "to": "51.255.214.164", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.181", "physics": true, "title": null, "to": "92.142.82.24", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.137.201", "physics": true, "title": null, "to": "1.173.32.207", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.142.158", "physics": true, "title": null, "to": "192.150.132.78", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.137.249", "physics": true, "title": null, "to": "45.173.120.80", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.133.69", "physics": true, "title": null, "to": "222.69.94.224", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.135.228", "physics": true, "title": null, "to": "13.152.213.226", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.186.249.91", "physics": true, "title": null, "to": "203.202.217.110", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.142.158", "physics": true, "title": null, "to": "192.150.132.95", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "99.116.225.59", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.195.12.220", "physics": true, "title": null, "to": "203.202.231.47", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "183.34.234.24", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.138.107", "physics": true, "title": null, "to": "123.56.42.186", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.131.182", "physics": true, "title": null, "to": "106.53.158.107", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.149.101", "physics": true, "title": null, "to": "54.176.138.21", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.136.94", "physics": true, "title": null, "to": "107.40.63.31", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.172.15.24", "physics": true, "title": null, "to": "203.202.134.90", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.134.90", "physics": true, "title": null, "to": "98.246.81.19", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.146.71", "physics": true, "title": null, "to": "184.150.8.212", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.129.172", "physics": true, "title": null, "to": "118.101.253.6", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.240.240.25", "physics": true, "title": null, "to": "202.121.148.179", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.236.69.95", "physics": true, "title": null, "to": "202.121.184.241", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.141.90", "physics": true, "title": null, "to": "173.33.50.185", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.128.210", "physics": true, "title": null, "to": "216.69.29.168", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.170.247.16", "physics": true, "title": null, "to": "133.37.56.19", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.131.208", "physics": true, "title": null, "to": "52.75.197.125", "width": "2px"}, {"arrows": "to", "color": "#0080FF", "from": "203.202.143.253", "physics": true, "title": null, "to": "200.51.247.215", "width": "2px"}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": false,
+            "type": "continuous"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+        
+        
+
+        
+
+        network = new vis.Network(container, data, options);
+
+        
+
+
+        
+        network.on("stabilizationProgress", function(params) {
+      		document.getElementById('loadingBar').removeAttribute("style");
+	        var maxWidth = 496;
+	        var minWidth = 20;
+	        var widthFactor = params.iterations/params.total;
+	        var width = Math.max(minWidth,maxWidth * widthFactor);
+
+	        document.getElementById('bar').style.width = width + 'px';
+	        document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+	    });
+	    network.once("stabilizationIterationsDone", function() {
+	        document.getElementById('text').innerHTML = '100%';
+	        document.getElementById('bar').style.width = '496px';
+	        document.getElementById('loadingBar').style.opacity = 0;
+	        // really clean the dom element
+	        setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+	    });
+        
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>
+</body>
+</html>

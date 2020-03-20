@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <div class="jumbotron">
+        <h1>
+          WireHound Filter
+        </h1>
+        <p>
+        In this page, some basic filters are displayed. You can choose the packets of interest by apply these filters to the original traffic file [{{ file }}].
+        </p>
+
+        <form action="" method="post" class="form" role="form">
+          {{ form.hidden_tag() }}
+          {{ wtf.form_errors(form, hiddens="only") }}
+          <p>
+          {{ wtf.form_field(form.ipfilter, class='form-control', placeholder='IP Address (e.g. 192.168.0.*)') }}
+          {{ wtf.form_field(form.portfilter, class='form-control', placeholder='Port (e.g. 80,8080,1234-1238)') }}
+          <label for="ptlfilter">Protocol Filter</label><br>
+          {{ wtf.form_field(form.tcp, class='form-checkbox') }}
+          {{ wtf.form_field(form.udp, class='form-checkbox') }}
+          {{ wtf.form_field(form.icmp, class='form-checkbox') }}
+          {{ wtf.form_field(form.timefilter, class='form-control', placeholder='Time (Syntax: lowerBound,upperBound)') }}
+          {{ wtf.form_field(form.sizefilter, class='form-control', placeholder='Size (Syntax: lowerBound,upperBound), in Byte(s)') }}
+          {{ wtf.form_field(form.submit, class='form-submit') }}
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

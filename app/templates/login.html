@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-md-12 column">
+      <div class="jumbotron">
+
+        <h2>
+          Sign In
+        </h2>
+        <p>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class=flashes>
+          {% for message in messages %}
+          <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        </p>
+        <form action="" method="post" class="form" role="form">
+          {{ form.hidden_tag() }}
+          {{ wtf.form_errors(form, hiddens="only") }}
+          <p>
+          {{ wtf.form_field(form.username, class='form-control', placeholder='Ludwig') }}
+          {{ wtf.form_field(form.password, class='form-control', placeholder='Secret Words') }}
+          {{ wtf.form_field(form.remember_me, class='form-checkbox') }}
+          {{ wtf.form_field(form.submit, class='form-submit') }}
+          </p>
+        </form>
+        <p>New User? <a href="{{ url_for('register') }}">Register here</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
